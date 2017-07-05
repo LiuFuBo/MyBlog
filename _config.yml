@@ -3,16 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle:
-description:
-author: John Doe
+title: 刘富波的博客
+subtitle: 羞涩的有内涵
+description: 成都东软学院毕业，就职于深证柠檬金融信息服务有限公司， 擅长各项iOS前端技能。深入研究移动端开发与前端性能。
+author: 刘富波
+email: 18380438251@163.com
+keywords: “前端，js，开发者，程序猿，编程，开源，iOS，c，c++”
 language:
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: https://github.com/LiuFuBo1991
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -41,12 +43,59 @@ highlight:
   enable: true
   line_number: true
   auto_detect: false
-  tab_replace:
+  tab_replace: ''
 
 # Category & Tag
 default_category: uncategorized
 category_map:
 tag_map:
+
+# Content
+
+# 文章太长，截断按钮文字
+excerpt_link: more
+# 文章卡片右下角常驻链接，不需要请设置为false
+show_all_link: '展开全文'
+# 数学公式
+mathjax: false
+# 是否在新窗口打开链接
+open_in_new: false
+
+# Archives
+## 2: Enable pagination
+## 1: Disable pagination
+## 0: Fully Disable
+archive: 1
+category: 1
+tag: 1
+
+# Server
+## Hexo uses Connect as a server
+## You can customize the logger format as defined in
+## http://www.senchalabs.org/connect/logger.html
+port: 4000
+server_ip: localhost
+logger: false
+logger_format: dev
+
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: true
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
@@ -56,14 +105,38 @@ date_format: YYYY-MM-DD
 time_format: HH:mm:ss
 
 # Pagination
-## Set per_page to 0 to disable pagination
+## Set per_page to 0 to disable pagination 每页显示多少篇文章
 per_page: 10
 pagination_dir: page
+
+# Disqus
+disqus_shortname:
+
+#是否开启分享
+share_jia: true
+
+# slider的设置
+slider:
+  # 是否默认展开tags板块
+  showTags: false
+#你的头像url
+avatar: "http://upload.jianshu.io/users/upload_avatars/1863813/f0780d2033e6.JPG?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/300"  
+
+# 智能菜单
+# 如不需要，将该对应项置为false
+# 比如
+#smart_menu:
+#  friends: false
+smart_menu:
+  innerArchive: '所有文章'
+  friends: '友链'
+  aboutme: '关于我'
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: yilia
+exclude_generator:
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
