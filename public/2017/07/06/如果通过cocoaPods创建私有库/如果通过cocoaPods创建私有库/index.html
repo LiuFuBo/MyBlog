@@ -6,22 +6,31 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/LiuFuBo1991">
-  <title>配置PodSpec.文件容易遇到的问题 | 刘富波的博客</title>
+  <title>如果通过cocoaPods创建私有库 | 刘富波的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="keywords" content="黑魔法">
+  <meta name="description" content="在写代码的时候，有时候封装了一个很好的工具类，系统在以后的项目中也能够被使用，但是每次使用的时候，都需要拷贝代码，感觉很麻烦，所以，我希望能够将这些代码通过cocoaPods来进行托管，这样只需要通过cocoaPods来导入就行了。">
+<meta name="keywords" content="技术,私有库">
 <meta property="og:type" content="article">
-<meta property="og:title" content="配置PodSpec.文件容易遇到的问题">
-<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/index.html">
+<meta property="og:title" content="如果通过cocoaPods创建私有库">
+<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/06/如果通过cocoaPods创建私有库/如果通过cocoaPods创建私有库/index.html">
 <meta property="og:site_name" content="刘富波的博客">
-<meta property="og:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-07-05T08:12:29.000Z">
+<meta property="og:description" content="在写代码的时候，有时候封装了一个很好的工具类，系统在以后的项目中也能够被使用，但是每次使用的时候，都需要拷贝代码，感觉很麻烦，所以，我希望能够将这些代码通过cocoaPods来进行托管，这样只需要通过cocoaPods来导入就行了。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-2b1bd2823c867886.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-3924f9c806565ed9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-4e310d4a44fed494.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-07e8efb6cf3f0cda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-b9f8d496d3890abd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-3ce545e532c4f8c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-15aeae84bb44547f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-cf9f0af2bf0d7539.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-3e1d402f4f50f140.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-41154c6ca340934d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-3e0379f2dfd52bb9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-07-06T09:10:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="配置PodSpec.文件容易遇到的问题">
-<meta name="twitter:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="如果通过cocoaPods创建私有库">
+<meta name="twitter:description" content="在写代码的时候，有时候封装了一个很好的工具类，系统在以后的项目中也能够被使用，但是每次使用的时候，都需要拷贝代码，感觉很麻烦，所以，我希望能够将这些代码通过cocoaPods来进行托管，这样只需要通过cocoaPods来导入就行了。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-2b1bd2823c867886.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="刘富波的博客" type="application/atom+xml">
   
@@ -161,58 +170,39 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-如果通过cocoaPods创建私有库/如果通过cocoaPods创建私有库" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      配置PodSpec.文件容易遇到的问题
+      如果通过cocoaPods创建私有库
     </h1>
   
 
         
-        <a href="/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" class="archive-article-date">
-  	<time datetime="2017-07-04T09:47:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/06/如果通过cocoaPods创建私有库/如果通过cocoaPods创建私有库/" class="archive-article-date">
+  	<time datetime="2017-07-06T07:27:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <font color="black" size="3"> 前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。</font>
+        <p>在写代码的时候，有时候封装了一个很好的工具类，系统在以后的项目中也能够被使用，但是每次使用的时候，都需要拷贝代码，感觉很麻烦，所以，我希望能够将这些代码通过cocoaPods来进行托管，这样只需要通过cocoaPods来导入就行了。<br><a id="more"></a></p>
+<h4 id="一：咱们第一步需要在github上面创建一个仓库来存储代码"><a href="#一：咱们第一步需要在github上面创建一个仓库来存储代码" class="headerlink" title="一：咱们第一步需要在github上面创建一个仓库来存储代码"></a>一：咱们第一步需要在github上面创建一个仓库来存储代码</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-2b1bd2823c867886.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="二-点击创建项目以后，咱们需要将代码上传到仓库中，现在在本地创建一个用于装demo和工具类的文件夹"><a href="#二-点击创建项目以后，咱们需要将代码上传到仓库中，现在在本地创建一个用于装demo和工具类的文件夹" class="headerlink" title="二:点击创建项目以后，咱们需要将代码上传到仓库中，现在在本地创建一个用于装demo和工具类的文件夹"></a>二:点击创建项目以后，咱们需要将代码上传到仓库中，现在在本地创建一个用于装demo和工具类的文件夹</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-3924f9c806565ed9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" align="center"></p>
+<h4 id="三：创建文件夹以后，将文件夹拖入sourcetree并将其添加远程仓库"><a href="#三：创建文件夹以后，将文件夹拖入sourcetree并将其添加远程仓库" class="headerlink" title="三：创建文件夹以后，将文件夹拖入sourcetree并将其添加远程仓库"></a>三：创建文件夹以后，将文件夹拖入sourcetree并将其添加远程仓库</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-4e310d4a44fed494.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="四：然后在本地创建的文件夹中创建Demo以及工具类文件夹"><a href="#四：然后在本地创建的文件夹中创建Demo以及工具类文件夹" class="headerlink" title="四：然后在本地创建的文件夹中创建Demo以及工具类文件夹"></a>四：然后在本地创建的文件夹中创建Demo以及工具类文件夹</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-07e8efb6cf3f0cda.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="五：将本地代码上传到github上面，上传完以后是这个样子"><a href="#五：将本地代码上传到github上面，上传完以后是这个样子" class="headerlink" title="五：将本地代码上传到github上面，上传完以后是这个样子"></a>五：将本地代码上传到github上面，上传完以后是这个样子</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-b9f8d496d3890abd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="六-配置podspec文件-这个文件你可以通过命令创建，也可以通过拷贝过来再进行修改，但是请注意，不要用文本对该文件进行编辑，否则最后该文件将不能正常使用。这里我是用sublime-Text-2这款软件打开的"><a href="#六-配置podspec文件-这个文件你可以通过命令创建，也可以通过拷贝过来再进行修改，但是请注意，不要用文本对该文件进行编辑，否则最后该文件将不能正常使用。这里我是用sublime-Text-2这款软件打开的" class="headerlink" title="六:配置podspec文件,这个文件你可以通过命令创建，也可以通过拷贝过来再进行修改，但是请注意，不要用文本对该文件进行编辑，否则最后该文件将不能正常使用。这里我是用sublime Text 2这款软件打开的"></a>六:配置podspec文件,这个文件你可以通过命令创建，也可以通过拷贝过来再进行修改，但是请注意，不要用文本对该文件进行编辑，否则最后该文件将不能正常使用。这里我是用sublime Text 2这款软件打开的</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-3ce545e532c4f8c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="七：配置好以后，就把该配置文件上传到github上面，成功后多了一个podspec文件"><a href="#七：配置好以后，就把该配置文件上传到github上面，成功后多了一个podspec文件" class="headerlink" title="七：配置好以后，就把该配置文件上传到github上面，成功后多了一个podspec文件"></a>七：配置好以后，就把该配置文件上传到github上面，成功后多了一个podspec文件</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-15aeae84bb44547f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="八-新建一个项目，并将其通过cocoaPods导入项目"><a href="#八-新建一个项目，并将其通过cocoaPods导入项目" class="headerlink" title="八:新建一个项目，并将其通过cocoaPods导入项目"></a>八:新建一个项目，并将其通过cocoaPods导入项目</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-cf9f0af2bf0d7539.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="九：执行过后，结果就是这样-此时该工具类已经通过cocoaPods导入我们项目中了"><a href="#九：执行过后，结果就是这样-此时该工具类已经通过cocoaPods导入我们项目中了" class="headerlink" title="九：执行过后，结果就是这样,此时该工具类已经通过cocoaPods导入我们项目中了"></a>九：执行过后，结果就是这样,此时该工具类已经通过cocoaPods导入我们项目中了</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-3e1d402f4f50f140.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="十：打开Xcode就可以使用该工具类了"><a href="#十：打开Xcode就可以使用该工具类了" class="headerlink" title="十：打开Xcode就可以使用该工具类了"></a>十：打开Xcode就可以使用该工具类了</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-41154c6ca340934d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="续：如果你的工具类还关联其他第三方公开库的话，只需要将podspec改成如下形式"><a href="#续：如果你的工具类还关联其他第三方公开库的话，只需要将podspec改成如下形式" class="headerlink" title="续：如果你的工具类还关联其他第三方公开库的话，只需要将podspec改成如下形式"></a>续：如果你的工具类还关联其他第三方公开库的话，只需要将podspec改成如下形式</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-3e0379f2dfd52bb9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 
-
-<p>一:第一坑，所有需要验证的PodSpec.文件都必须要打tag值，不然不能通过验证。(注意:每次打的tag值必须比上次打的tag值大，而且你的版本号也不能小于你的tag值，不然也不能验证通过)<br><a id="more"></a></p>
-<p>二:第二坑,所有的配置文件验证都是跟github上面的代码进行对比的，所以在修改了本地PodSpec.文件以后，请先上传代码到github再进行 pod lib lint 命令验证</p>
-<p>三:第三坑,公开头文件的目录请用单引号括起来,如下:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>四:如果你在终端中出现了以下显示，证明你的项目已经发布成功了<br><img src="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>五:一般情况下，在你提交成功以后，其实还是不能再终端中通过pod search 命令搜索到你托管的第三方的，你需要到cocoapods去认领你的第三方<br><a href="https://trunk.cocoapods.org/claims/new" target="_blank" rel="external">传送门</a></p>
-<p>六:之后就一直等待发布一段时间，然后就能在cocoapods上面搜索到你的第三方了(注：有时候还是搜索不出来你发布第三方，我们这个时候就可以只通过名字来搜索你的第三方 )</p>
-<p>pod search +三方名  + simple   </p>
-<p>(注:一开始我只能通过上面那种+simple的方式搜索出来，我当时是怀疑是自己的图片资源放在项目中，但是并没有在spec文件中设置规则来约束它，因为我的spec文件在进行验证的过程中报警告了，最后操作了一番，不需要加simple也能搜索出来了。)</p>
-<p>(1):  如果还是搜索不出来那就执行 pod setup</p>
-<p>发现显示的还是 Unable to find a pod with name, author, summary, or descriptionmatching ‘LFBPageScrollView’。</p>
-<p>(2)：如果搜索不出来那就更新pod  :</p>
-<p>命令:  pod repo update   然后就是等待更新结果</p>
-<p>(3): 这个时候咱们就将生成的json文件给删除了</p>
-<p>pod setup成功后会生成~/Library/Caches/CocoaPods/search_index.json文件。</p>
-<p>终端输入rm ~/Library/Caches/CocoaPods/search_index.json</p>
-<p>删除成功后再执行pod search</p>
-<p>(4):执行pod search </p>
-<p>终端输入：pod search LFBPageScrollView(不区分大小写)</p>
-<p>输出：Creating search index for spec repo ‘master’.. Done!，稍等片刻就会出现所有带LFBPageScrollView字段的类库出现；如果在这种情况下还是搜索不到你的第三方，那么你就只有再仔细检查一下，你之前哪里做的不对。</p>
-<p>关于如何更新版本的问题:</p>
-<p>在很多时候，我们需要更新迭代我们发布的第三方，我们这个时候只需要做以下几件事就可以轻松的更新原来的东西。</p>
-<p>1.需要将spec文件拷贝过来</p>
-<p>2.将spec的version 和tag 都改一下</p>
-<p>3.通过git打一个新的大于以前的tag值</p>
-<p>4.通过pod spec lint 来验证spec文件是否有效</p>
-<p>5.将新的spec文件推送到cocoapods上面去</p>
-<p>6.再次到cocoapods官网去认领自己的第三方(注:朋友说需要再次领取，也有人说不需要再次认领，不需要再次认领的情况我还是没尝试过，等我试过以后再给大家分享。)</p>
-<pre><code>注:(转载请注明出处!!!)
-</code></pre>
       
 
       
@@ -246,7 +236,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">私有库</a>
         		</li>
       		
 		</ul>
@@ -302,7 +296,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/06/如果通过cocoaPods创建私有库/如果通过cocoaPods创建私有库/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -316,15 +310,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/07/06/抓包工具charles/抓包工具charles/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/07/06/cocoaPods升级后遇到的巨坑/cocoaPods升级后遇到的巨坑/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          抓包工具charles
+          cocoaPods升级后遇到的巨坑
         
       </div>
     </a>
   
+  
+    <a href="/2017/07/06/抓包工具charles/抓包工具charles/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">抓包工具charles</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 

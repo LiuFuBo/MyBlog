@@ -6,22 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/LiuFuBo1991">
-  <title>配置PodSpec.文件容易遇到的问题 | 刘富波的博客</title>
+  <title>NSClassFromString,NSSelectorFromString... | 刘富波的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="keywords" content="黑魔法">
+  <meta name="description" content="NSClassFromString这个方法判断类是否存在，如果存在就动态加载的，不存为就返回一个空对象; id myObj = [[NSClassFromString(@”MyClass”) alloc] init]; 正常情况下等价于：id myObj = [[MyClass alloc] init];">
+<meta name="keywords" content="技术">
 <meta property="og:type" content="article">
-<meta property="og:title" content="配置PodSpec.文件容易遇到的问题">
-<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/index.html">
+<meta property="og:title" content="NSClassFromString,NSSelectorFromString...">
+<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/06/NSClassFromString-NSSelectorFromString/NSClassFromString-NSSelectorFromString/index.html">
 <meta property="og:site_name" content="刘富波的博客">
-<meta property="og:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-07-05T08:12:29.000Z">
+<meta property="og:description" content="NSClassFromString这个方法判断类是否存在，如果存在就动态加载的，不存为就返回一个空对象; id myObj = [[NSClassFromString(@”MyClass”) alloc] init]; 正常情况下等价于：id myObj = [[MyClass alloc] init];">
+<meta property="og:updated_time" content="2017-07-06T09:01:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="配置PodSpec.文件容易遇到的问题">
-<meta name="twitter:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="NSClassFromString,NSSelectorFromString...">
+<meta name="twitter:description" content="NSClassFromString这个方法判断类是否存在，如果存在就动态加载的，不存为就返回一个空对象; id myObj = [[NSClassFromString(@”MyClass”) alloc] init]; 正常情况下等价于：id myObj = [[MyClass alloc] init];">
   
     <link rel="alternative" href="/atom.xml" title="刘富波的博客" type="application/atom+xml">
   
@@ -161,58 +158,59 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-NSClassFromString-NSSelectorFromString/NSClassFromString-NSSelectorFromString" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      配置PodSpec.文件容易遇到的问题
+      NSClassFromString,NSSelectorFromString...
     </h1>
   
 
         
-        <a href="/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" class="archive-article-date">
-  	<time datetime="2017-07-04T09:47:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/06/NSClassFromString-NSSelectorFromString/NSClassFromString-NSSelectorFromString/" class="archive-article-date">
+  	<time datetime="2017-07-06T08:58:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <font color="black" size="3"> 前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。</font>
+        <h3 id="NSClassFromString"><a href="#NSClassFromString" class="headerlink" title="NSClassFromString"></a>NSClassFromString</h3><p>这个方法判断类是否存在，如果存在就动态加载的，不存为就返回一个空对象;</p>
+<p>id myObj = [[NSClassFromString(@”MyClass”) alloc] init];</p>
+<p>正常情况下等价于：id myObj = [[MyClass alloc] init];</p>
+<a id="more"></a>
+<p>优点：</p>
+<p>1， 弱化连接，因此并不会把没有的Framework也link到程序中。</p>
+<p>2，不需要使用import，因为类是动态加载的，只要存在就可以加载。因此如果你的toolchain中没有某个类的头文件定义，而你确信这个类是可以用的，那么也可以用这种方法。</p>
+<h3 id="NSSelectorFromString"><a href="#NSSelectorFromString" class="headerlink" title="NSSelectorFromString"></a>NSSelectorFromString</h3><p>这个方法是上个方法的补充，也是动态加载实例方法。</p>
+<p>SEL sel　=　NSSelectorFromString(@”doSomethingMethod:”)//注意这个冒号,说明方法带有参数</p>
+<p>if([object　respondsToSelector:sel]) {</p>
+<p>[object　performSelector:sel　withObject:color]; //注意如果有两个参数,使用两个withObject:参数;</p>
+<p>}</p>
+<h3 id="isKindOfClass"><a href="#isKindOfClass" class="headerlink" title="isKindOfClass"></a>isKindOfClass</h3><p>isKindOfClass 我们也可以使用isKindOfClass来检查一个对象是否是一个类的成员</p>
+<h3 id="isMemberOfClass"><a href="#isMemberOfClass" class="headerlink" title="isMemberOfClass"></a>isMemberOfClass</h3><p>isMemberOfClass方法是来确定对象是否是某一个类的成员</p>
+<h3 id="initWithCoder和initWithFrame的区别"><a href="#initWithCoder和initWithFrame的区别" class="headerlink" title="initWithCoder和initWithFrame的区别　"></a>initWithCoder和initWithFrame的区别　</h3><p>initWithCoder是一个类在IB中创建但在xocdde中被实例化时被调用的.比如,通过IB创建一个controller的nib文件,然后在xocde中通过initWithNibName来实例化这个controller,那么这个controller的initWithCoder会被调用.</p>
+<p>initWithFrame是由用户创建的UIView子类，实例时被调用</p>
+<h3 id="UIView-autoresizingMask"><a href="#UIView-autoresizingMask" class="headerlink" title="UIView autoresizingMask"></a>UIView autoresizingMask</h3><p>如果视图的autoresizesSubviews属性声明被设置为YES，则其子视图会根据autoresizingMask属性的值自动进行尺寸调整。简单配置一下视图的自动尺寸调整掩码常常就能使应用程序得到合适的行为；否则，应用程序就必须通过重载layoutSubviews方法来提供自己的实现。</p>
+<p>self.autoresizingMask = UIViewAutoresizingFlexibleWidth;//这个常量如果被设置，视图的宽度将和父视图的宽度一起成比例变化。否则，视图的宽度将保持不变。</p>
+<p>UIViewAutoresizingNone</p>
+<p>这个常量如果被设置，视图将不进行自动尺寸调整。</p>
+<p>UIViewAutoresizingFlexibleHeight</p>
+<p>这个常量如果被设置，视图的高度将和父视图的高度一起成比例变化。否则，视图的高度将保持不变。</p>
+<p>UIViewAutoresizingFlexibleWidth</p>
+<p>这个常量如果被设置，视图的宽度将和父视图的宽度一起成比例变化。否则，视图的宽度将保持不变。</p>
+<p>UIViewAutoresizingFlexibleLeftMargin</p>
+<p>这个常量如果被设置，视图的左边界将随着父视图宽度的变化而按比例进行调整。否则，视图和其父视图的左边界的相对位置将保持不变。</p>
+<p>UIViewAutoresizingFlexibleRightMargin</p>
+<p>这个常量如果被设置，视图的右边界将随着父视图宽度的变化而按比例进行调整。否则，视图和其父视图的右边界的相对位置将保持不变。</p>
+<p>UIViewAutoresizingFlexibleBottomMargin</p>
+<p>这个常量如果被设置，视图的底边界将随着父视图高度的变化而按比例进行调整。否则，视图和其父视图的底边界的相对位置将保持不变。</p>
+<p>UIViewAutoresizingFlexibleTopMargin</p>
+<p>这个常量如果被设置，视图的上边界将随着父视图高度的变化而按比例进行调整。否则，视图和其父视图的上边界的相对位置将保持不变。</p>
 
-
-<p>一:第一坑，所有需要验证的PodSpec.文件都必须要打tag值，不然不能通过验证。(注意:每次打的tag值必须比上次打的tag值大，而且你的版本号也不能小于你的tag值，不然也不能验证通过)<br><a id="more"></a></p>
-<p>二:第二坑,所有的配置文件验证都是跟github上面的代码进行对比的，所以在修改了本地PodSpec.文件以后，请先上传代码到github再进行 pod lib lint 命令验证</p>
-<p>三:第三坑,公开头文件的目录请用单引号括起来,如下:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>四:如果你在终端中出现了以下显示，证明你的项目已经发布成功了<br><img src="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>五:一般情况下，在你提交成功以后，其实还是不能再终端中通过pod search 命令搜索到你托管的第三方的，你需要到cocoapods去认领你的第三方<br><a href="https://trunk.cocoapods.org/claims/new" target="_blank" rel="external">传送门</a></p>
-<p>六:之后就一直等待发布一段时间，然后就能在cocoapods上面搜索到你的第三方了(注：有时候还是搜索不出来你发布第三方，我们这个时候就可以只通过名字来搜索你的第三方 )</p>
-<p>pod search +三方名  + simple   </p>
-<p>(注:一开始我只能通过上面那种+simple的方式搜索出来，我当时是怀疑是自己的图片资源放在项目中，但是并没有在spec文件中设置规则来约束它，因为我的spec文件在进行验证的过程中报警告了，最后操作了一番，不需要加simple也能搜索出来了。)</p>
-<p>(1):  如果还是搜索不出来那就执行 pod setup</p>
-<p>发现显示的还是 Unable to find a pod with name, author, summary, or descriptionmatching ‘LFBPageScrollView’。</p>
-<p>(2)：如果搜索不出来那就更新pod  :</p>
-<p>命令:  pod repo update   然后就是等待更新结果</p>
-<p>(3): 这个时候咱们就将生成的json文件给删除了</p>
-<p>pod setup成功后会生成~/Library/Caches/CocoaPods/search_index.json文件。</p>
-<p>终端输入rm ~/Library/Caches/CocoaPods/search_index.json</p>
-<p>删除成功后再执行pod search</p>
-<p>(4):执行pod search </p>
-<p>终端输入：pod search LFBPageScrollView(不区分大小写)</p>
-<p>输出：Creating search index for spec repo ‘master’.. Done!，稍等片刻就会出现所有带LFBPageScrollView字段的类库出现；如果在这种情况下还是搜索不到你的第三方，那么你就只有再仔细检查一下，你之前哪里做的不对。</p>
-<p>关于如何更新版本的问题:</p>
-<p>在很多时候，我们需要更新迭代我们发布的第三方，我们这个时候只需要做以下几件事就可以轻松的更新原来的东西。</p>
-<p>1.需要将spec文件拷贝过来</p>
-<p>2.将spec的version 和tag 都改一下</p>
-<p>3.通过git打一个新的大于以前的tag值</p>
-<p>4.通过pod spec lint 来验证spec文件是否有效</p>
-<p>5.将新的spec文件推送到cocoapods上面去</p>
-<p>6.再次到cocoapods官网去认领自己的第三方(注:朋友说需要再次领取，也有人说不需要再次认领，不需要再次认领的情况我还是没尝试过，等我试过以后再给大家分享。)</p>
-<pre><code>注:(转载请注明出处!!!)
-</code></pre>
       
 
       
@@ -246,7 +244,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
         		</li>
       		
 		</ul>
@@ -302,7 +300,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/06/NSClassFromString-NSSelectorFromString/NSClassFromString-NSSelectorFromString/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -316,15 +314,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/07/06/抓包工具charles/抓包工具charles/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/07/06/高德地图的使用技巧/高德地图的使用技巧/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          抓包工具charles
+          高德地图的使用技巧
         
       </div>
     </a>
   
+  
+    <a href="/2017/07/06/JavaScriptCore的巨坑/JavaScriptCore的巨坑/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JavaScriptCore的巨坑（JSExportAs方式绑定的本地通信）</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 

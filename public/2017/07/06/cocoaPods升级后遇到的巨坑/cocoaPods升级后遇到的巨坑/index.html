@@ -6,22 +6,30 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/LiuFuBo1991">
-  <title>配置PodSpec.文件容易遇到的问题 | 刘富波的博客</title>
+  <title>cocoaPods升级后遇到的巨坑 | 刘富波的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="keywords" content="黑魔法">
+  <meta name="description" content="之前我的CocoaPods一直是在0.0.39这个版本中，一直都处于相安无事的状态，后来看到同事将CocoaPods升级到1.1.1正式版本以后，我也跟着装逼，然后就一不小心装逼失败，把CocoaPods升级到最新的bata版本了，最后又搞了半天把版本降为了1.1.1版本。感觉自己棒棒哒，过了年来，完蛋了，出问题了。现在我就完全复现出错的整个流程以及解决办法，帮助有需要的人。">
+<meta name="keywords" content="技术,cocoaPods,终端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="配置PodSpec.文件容易遇到的问题">
-<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/index.html">
+<meta property="og:title" content="cocoaPods升级后遇到的巨坑">
+<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/06/cocoaPods升级后遇到的巨坑/cocoaPods升级后遇到的巨坑/index.html">
 <meta property="og:site_name" content="刘富波的博客">
-<meta property="og:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-07-05T08:12:29.000Z">
+<meta property="og:description" content="之前我的CocoaPods一直是在0.0.39这个版本中，一直都处于相安无事的状态，后来看到同事将CocoaPods升级到1.1.1正式版本以后，我也跟着装逼，然后就一不小心装逼失败，把CocoaPods升级到最新的bata版本了，最后又搞了半天把版本降为了1.1.1版本。感觉自己棒棒哒，过了年来，完蛋了，出问题了。现在我就完全复现出错的整个流程以及解决办法，帮助有需要的人。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-8a52de6c83d0169e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-532fb3a37575205a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-6a26413e86a6d89d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-9ea3e68c4f0f0219.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-9f48dd88e367465a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-b839f74aad7d9c1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-30b1d2c6ad01dedf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-620b1cb370b3151f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-8e1fe61984957ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-8ca00166c9a13d8e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-07-06T09:11:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="配置PodSpec.文件容易遇到的问题">
-<meta name="twitter:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="cocoaPods升级后遇到的巨坑">
+<meta name="twitter:description" content="之前我的CocoaPods一直是在0.0.39这个版本中，一直都处于相安无事的状态，后来看到同事将CocoaPods升级到1.1.1正式版本以后，我也跟着装逼，然后就一不小心装逼失败，把CocoaPods升级到最新的bata版本了，最后又搞了半天把版本降为了1.1.1版本。感觉自己棒棒哒，过了年来，完蛋了，出问题了。现在我就完全复现出错的整个流程以及解决办法，帮助有需要的人。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-8a52de6c83d0169e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="刘富波的博客" type="application/atom+xml">
   
@@ -161,58 +169,34 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-cocoaPods升级后遇到的巨坑/cocoaPods升级后遇到的巨坑" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      配置PodSpec.文件容易遇到的问题
+      cocoaPods升级后遇到的巨坑
     </h1>
   
 
         
-        <a href="/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" class="archive-article-date">
-  	<time datetime="2017-07-04T09:47:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/06/cocoaPods升级后遇到的巨坑/cocoaPods升级后遇到的巨坑/" class="archive-article-date">
+  	<time datetime="2017-07-06T08:03:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <font color="black" size="3"> 前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。</font>
+        <p>  之前我的CocoaPods一直是在0.0.39这个版本中，一直都处于相安无事的状态，后来看到同事将CocoaPods升级到1.1.1正式版本以后，我也跟着装逼，然后就一不小心装逼失败，把CocoaPods升级到最新的bata版本了，最后又搞了半天把版本降为了1.1.1版本。感觉自己棒棒哒，过了年来，完蛋了，出问题了。现在我就完全复现出错的整个流程以及解决办法，帮助有需要的人。<br>  <a id="more"></a></p>
+<h4 id="一：假设我们现在需要安装最新版本AFNetworking-第一步肯定是在终端导入地址"><a href="#一：假设我们现在需要安装最新版本AFNetworking-第一步肯定是在终端导入地址" class="headerlink" title="一：假设我们现在需要安装最新版本AFNetworking,第一步肯定是在终端导入地址"></a>一：假设我们现在需要安装最新版本AFNetworking,第一步肯定是在终端导入地址</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-8a52de6c83d0169e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="二-在导入项目地址以后，我们开始查询AFNetworking有哪些版本，选中我们需要的版本"><a href="#二-在导入项目地址以后，我们开始查询AFNetworking有哪些版本，选中我们需要的版本" class="headerlink" title="二:在导入项目地址以后，我们开始查询AFNetworking有哪些版本，选中我们需要的版本"></a>二:在导入项目地址以后，我们开始查询AFNetworking有哪些版本，选中我们需要的版本</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-532fb3a37575205a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="三：选中我们需要的那个版本，并复制版本号"><a href="#三：选中我们需要的那个版本，并复制版本号" class="headerlink" title="三：选中我们需要的那个版本，并复制版本号"></a>三：选中我们需要的那个版本，并复制版本号</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-6a26413e86a6d89d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="四：配置Podfile文件"><a href="#四：配置Podfile文件" class="headerlink" title="四：配置Podfile文件"></a>四：配置Podfile文件</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-9ea3e68c4f0f0219.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="五：配置后是这样，然后保存Podfile文件"><a href="#五：配置后是这样，然后保存Podfile文件" class="headerlink" title="五：配置后是这样，然后保存Podfile文件"></a>五：配置后是这样，然后保存Podfile文件</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-9f48dd88e367465a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<h4 id="六-开始安装AFNetworking-这下你会发现报错了，完蛋了，好紧张，怎么办？"><a href="#六-开始安装AFNetworking-这下你会发现报错了，完蛋了，好紧张，怎么办？" class="headerlink" title="六:开始安装AFNetworking,这下你会发现报错了，完蛋了，好紧张，怎么办？"></a>六:开始安装AFNetworking,这下你会发现报错了，完蛋了，好紧张，怎么办？</h4><p><img src="http://upload-images.jianshu.io/upload_images/1863813-b839f74aad7d9c1c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>最后，我们在通过查询资料以后发现。CocoaPods升级后，Podfile文件的内容格式要求发生了变化，必须指出指出所用第三方库的target。没有办法，只能指定对应的target,我查询了一下网上的办法是这样的。<br><img src="http://upload-images.jianshu.io/upload_images/1863813-30b1d2c6ad01dedf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>他这样也能实现，但是我觉得还是挺麻烦的，其实我们只需要在配置podfile文件之前创建一个podfile文件以后，他就会自动的生成指定了target的podfile文件。<br><img src="http://upload-images.jianshu.io/upload_images/1863813-620b1cb370b3151f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>先创建podfile文件以后，打开pod file文件，你看到的就是这个样子<br><img src="http://upload-images.jianshu.io/upload_images/1863813-8e1fe61984957ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>这个就是需要指定的target的标准格式，系统自己就可以帮你生成，完全不用你去动手敲，最后一步，安装AFNetworking成功<br><img src="http://upload-images.jianshu.io/upload_images/1863813-8ca00166c9a13d8e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>备注：虽然写的繁琐，但是重点是为了把问题讲清楚，希望能给被这个问题带来困惑的人给予帮助，大神勿喷，谢谢！</p>
 
-
-<p>一:第一坑，所有需要验证的PodSpec.文件都必须要打tag值，不然不能通过验证。(注意:每次打的tag值必须比上次打的tag值大，而且你的版本号也不能小于你的tag值，不然也不能验证通过)<br><a id="more"></a></p>
-<p>二:第二坑,所有的配置文件验证都是跟github上面的代码进行对比的，所以在修改了本地PodSpec.文件以后，请先上传代码到github再进行 pod lib lint 命令验证</p>
-<p>三:第三坑,公开头文件的目录请用单引号括起来,如下:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>四:如果你在终端中出现了以下显示，证明你的项目已经发布成功了<br><img src="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>五:一般情况下，在你提交成功以后，其实还是不能再终端中通过pod search 命令搜索到你托管的第三方的，你需要到cocoapods去认领你的第三方<br><a href="https://trunk.cocoapods.org/claims/new" target="_blank" rel="external">传送门</a></p>
-<p>六:之后就一直等待发布一段时间，然后就能在cocoapods上面搜索到你的第三方了(注：有时候还是搜索不出来你发布第三方，我们这个时候就可以只通过名字来搜索你的第三方 )</p>
-<p>pod search +三方名  + simple   </p>
-<p>(注:一开始我只能通过上面那种+simple的方式搜索出来，我当时是怀疑是自己的图片资源放在项目中，但是并没有在spec文件中设置规则来约束它，因为我的spec文件在进行验证的过程中报警告了，最后操作了一番，不需要加simple也能搜索出来了。)</p>
-<p>(1):  如果还是搜索不出来那就执行 pod setup</p>
-<p>发现显示的还是 Unable to find a pod with name, author, summary, or descriptionmatching ‘LFBPageScrollView’。</p>
-<p>(2)：如果搜索不出来那就更新pod  :</p>
-<p>命令:  pod repo update   然后就是等待更新结果</p>
-<p>(3): 这个时候咱们就将生成的json文件给删除了</p>
-<p>pod setup成功后会生成~/Library/Caches/CocoaPods/search_index.json文件。</p>
-<p>终端输入rm ~/Library/Caches/CocoaPods/search_index.json</p>
-<p>删除成功后再执行pod search</p>
-<p>(4):执行pod search </p>
-<p>终端输入：pod search LFBPageScrollView(不区分大小写)</p>
-<p>输出：Creating search index for spec repo ‘master’.. Done!，稍等片刻就会出现所有带LFBPageScrollView字段的类库出现；如果在这种情况下还是搜索不到你的第三方，那么你就只有再仔细检查一下，你之前哪里做的不对。</p>
-<p>关于如何更新版本的问题:</p>
-<p>在很多时候，我们需要更新迭代我们发布的第三方，我们这个时候只需要做以下几件事就可以轻松的更新原来的东西。</p>
-<p>1.需要将spec文件拷贝过来</p>
-<p>2.将spec的version 和tag 都改一下</p>
-<p>3.通过git打一个新的大于以前的tag值</p>
-<p>4.通过pod spec lint 来验证spec文件是否有效</p>
-<p>5.将新的spec文件推送到cocoapods上面去</p>
-<p>6.再次到cocoapods官网去认领自己的第三方(注:朋友说需要再次领取，也有人说不需要再次认领，不需要再次认领的情况我还是没尝试过，等我试过以后再给大家分享。)</p>
-<pre><code>注:(转载请注明出处!!!)
-</code></pre>
       
 
       
@@ -246,7 +230,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">cocoaPods</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">终端</a>
         		</li>
       		
 		</ul>
@@ -302,7 +294,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/06/cocoaPods升级后遇到的巨坑/cocoaPods升级后遇到的巨坑/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -316,15 +308,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/07/06/抓包工具charles/抓包工具charles/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/07/06/性能检测要怎么玩才尽兴/性能检测要怎么玩才尽兴/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          抓包工具charles
+          性能检测要怎么玩才尽兴
         
       </div>
     </a>
   
+  
+    <a href="/2017/07/06/如果通过cocoaPods创建私有库/如果通过cocoaPods创建私有库/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">如果通过cocoaPods创建私有库</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 

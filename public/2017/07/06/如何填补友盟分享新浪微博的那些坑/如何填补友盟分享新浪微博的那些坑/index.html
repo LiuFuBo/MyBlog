@@ -6,22 +6,31 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/LiuFuBo1991">
-  <title>配置PodSpec.文件容易遇到的问题 | 刘富波的博客</title>
+  <title>如何填补友盟分享新浪微博的那些坑 | 刘富波的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="keywords" content="黑魔法">
+  <meta name="description" content="前端时间听人说友盟分享更加简单、专业一些，然后我就开始尝试通过友盟来写一个分享的demo，因为，新浪微博分享是不要真机测试也能进行分享的，所以，在毫不知情的情况下，慢慢的就走进了那些坑。  废话不多说，现在把怎样实现一个新浪微博的分享给大家演示一遍。希望能给后面的童鞋起到一起抛砖引玉的效果。">
+<meta name="keywords" content="分享,第三方">
 <meta property="og:type" content="article">
-<meta property="og:title" content="配置PodSpec.文件容易遇到的问题">
-<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/index.html">
+<meta property="og:title" content="如何填补友盟分享新浪微博的那些坑">
+<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/06/如何填补友盟分享新浪微博的那些坑/如何填补友盟分享新浪微博的那些坑/index.html">
 <meta property="og:site_name" content="刘富波的博客">
-<meta property="og:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-07-05T08:12:29.000Z">
+<meta property="og:description" content="前端时间听人说友盟分享更加简单、专业一些，然后我就开始尝试通过友盟来写一个分享的demo，因为，新浪微博分享是不要真机测试也能进行分享的，所以，在毫不知情的情况下，慢慢的就走进了那些坑。  废话不多说，现在把怎样实现一个新浪微博的分享给大家演示一遍。希望能给后面的童鞋起到一起抛砖引玉的效果。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-e5c934d55c4d82fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-df9256d78dae125a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-f9d0aa966c311156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-9d2c6ee717f20e0e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-c967fcba2f2cb3ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-3911b9688887554c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-211ebe5c6b90c561.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-0f1fd0ac85eefb32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-e392053e01ad3242.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-06bd9e8712d00d7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-b7c1a4b45cacd321.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-07-06T10:56:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="配置PodSpec.文件容易遇到的问题">
-<meta name="twitter:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="如何填补友盟分享新浪微博的那些坑">
+<meta name="twitter:description" content="前端时间听人说友盟分享更加简单、专业一些，然后我就开始尝试通过友盟来写一个分享的demo，因为，新浪微博分享是不要真机测试也能进行分享的，所以，在毫不知情的情况下，慢慢的就走进了那些坑。  废话不多说，现在把怎样实现一个新浪微博的分享给大家演示一遍。希望能给后面的童鞋起到一起抛砖引玉的效果。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-e5c934d55c4d82fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="刘富波的博客" type="application/atom+xml">
   
@@ -161,58 +170,57 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-如何填补友盟分享新浪微博的那些坑/如何填补友盟分享新浪微博的那些坑" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      配置PodSpec.文件容易遇到的问题
+      如何填补友盟分享新浪微博的那些坑
     </h1>
   
 
         
-        <a href="/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" class="archive-article-date">
-  	<time datetime="2017-07-04T09:47:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/06/如何填补友盟分享新浪微博的那些坑/如何填补友盟分享新浪微博的那些坑/" class="archive-article-date">
+  	<time datetime="2017-07-06T10:51:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <font color="black" size="3"> 前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。</font>
+        <p>前端时间听人说友盟分享更加简单、专业一些，然后我就开始尝试通过友盟来写一个分享的demo，因为，新浪微博分享是不要真机测试也能进行分享的，所以，在毫不知情的情况下，慢慢的就走进了那些坑。</p>
+<p> 废话不多说，现在把怎样实现一个新浪微博的分享给大家演示一遍。希望能给后面的童鞋起到一起抛砖引玉的效果。</p>
+ <a id="more"></a>
+<p> 一：首先，友盟分享要想成功，你得导入像QQ、微信、新浪微博、短信等第三方的白名单，我一开始就是被这个给坑了，拿着友盟的官方文档和demo，就开始埋头苦干，结果就是打死也分享不成功，到处问别人，才听说有要加白名单这回事，这才找到了文档加白名单的地方。</p>
+<p>下面那个就是友盟分享文档加白名单的地方，你只需要按照他上面的提示把你的info.plist文件以source.code的形式打开，再把那些白名单加进去就行了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-e5c934d55c4d82fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>当然，加入白名单以后，你就算是过了第一关，跳过了一个坑。这个时候，如果你想要给自己的APP瘦身的话，你按照下面的方式去操作</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-df9256d78dae125a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>好，已经过了一关了，想想是不是有点小激动，不过，不要太开心，这只是一个开始。接下来我们就要开始进行新浪微博的分享了，首先你如果想要进行新浪微博的分享，那你就必须得到新浪的官网去注册一个应用的appkey 和appsecret,登录网址：<a href="http://open.weibo.com，一般申请的时候要填写你个人所在公司，还有身份证号码以及身份证正反面照片啥的，这个申请流程，各位童鞋可以自行脑补，反正我当时是嫌麻烦，就用的他官方demo的appkey来用的。反正是用来实验的，何必那么认真呢！" target="_blank" rel="external">http://open.weibo.com，一般申请的时候要填写你个人所在公司，还有身份证号码以及身份证正反面照片啥的，这个申请流程，各位童鞋可以自行脑补，反正我当时是嫌麻烦，就用的他官方demo的appkey来用的。反正是用来实验的，何必那么认真呢！</a></p>
+<p>这些工作完成以后，我们就要导入友盟的分享的SDK了，话不用说，大家都应该知道有两种方法（手动导入、cocoaPods导入）你只需要选择其中一种就好了。两种方法我都试过了，这里我推荐使用cocoaPods来导入，这样不用自己去配置那些链接库啥的，不容易出错。</p>
+<p>通过cocoaPods导入，首先在你终端中今日你分享项目的目录并且查询友盟分享当前有那些版本:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-f9d0aa966c311156.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>在这么多版本中你要选择比较新的一个版本，我是选择的4.3这个版本，然后我们就可以在vim中去配置关于友盟的信息：<br><img src="http://upload-images.jianshu.io/upload_images/1863813-9d2c6ee717f20e0e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>然后再安装4.3版本的友盟分享SDK，只要出现了complete就表示完成了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-c967fcba2f2cb3ea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>这个时候，我们再到AppDelegate.m文件中加上两个头文件</p>
+<p> #import “UMSocial.h”  —-&gt;这个头文件是关于友盟的</p>
+<p> #import “UMSocialSinaSSOHandler.h” —–&gt;这个头文件是关于新浪微博的</p>
+<p>下面的appkey对应什么意思都有代码，照着这样写就行了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-3911b9688887554c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>我们在处理新浪微博SSO授权以及微信分享完成以后还要跳转回当前app来，所以还要加入下面两端代码</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-211ebe5c6b90c561.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>在这里，你还得在你项目的info-&gt;URL Types里面添加一个URL Schemes进去</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-0f1fd0ac85eefb32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>添加完上面的代码，AppDelegate.m里面的代码算是全部写完了，现在你只需要集成分享功能的视图源码UIViewController.m，把如下代码复制并粘贴到你将弹出一个分享列表的位置后面，例如到响应分享按钮的方法中调用它。并且修改下面的友盟appkey，你要分享的文字、图片，你要分享到的微博平台，例如下面写的是新浪微博、腾讯微博、人人网。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-e392053e01ad3242.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>你如果还想要知道你是否分享成功，你还可以调用以下方法</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-06bd9e8712d00d7d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>到这里，基本上一个完整的新浪微博分享就成功了，但是还有一个最大的坑等着你去填呢，我花了好久才解决的就是这个大坑。因为新浪微博注册的时候你要上传你的app的bundle id，所以你当前项目的bundle id必须跟你申请新浪微博的bundle id一致，不然的话，就会发生分享授权不成功，出现闪退的现象。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-b7c1a4b45cacd321.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 
-
-<p>一:第一坑，所有需要验证的PodSpec.文件都必须要打tag值，不然不能通过验证。(注意:每次打的tag值必须比上次打的tag值大，而且你的版本号也不能小于你的tag值，不然也不能验证通过)<br><a id="more"></a></p>
-<p>二:第二坑,所有的配置文件验证都是跟github上面的代码进行对比的，所以在修改了本地PodSpec.文件以后，请先上传代码到github再进行 pod lib lint 命令验证</p>
-<p>三:第三坑,公开头文件的目录请用单引号括起来,如下:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>四:如果你在终端中出现了以下显示，证明你的项目已经发布成功了<br><img src="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>五:一般情况下，在你提交成功以后，其实还是不能再终端中通过pod search 命令搜索到你托管的第三方的，你需要到cocoapods去认领你的第三方<br><a href="https://trunk.cocoapods.org/claims/new" target="_blank" rel="external">传送门</a></p>
-<p>六:之后就一直等待发布一段时间，然后就能在cocoapods上面搜索到你的第三方了(注：有时候还是搜索不出来你发布第三方，我们这个时候就可以只通过名字来搜索你的第三方 )</p>
-<p>pod search +三方名  + simple   </p>
-<p>(注:一开始我只能通过上面那种+simple的方式搜索出来，我当时是怀疑是自己的图片资源放在项目中，但是并没有在spec文件中设置规则来约束它，因为我的spec文件在进行验证的过程中报警告了，最后操作了一番，不需要加simple也能搜索出来了。)</p>
-<p>(1):  如果还是搜索不出来那就执行 pod setup</p>
-<p>发现显示的还是 Unable to find a pod with name, author, summary, or descriptionmatching ‘LFBPageScrollView’。</p>
-<p>(2)：如果搜索不出来那就更新pod  :</p>
-<p>命令:  pod repo update   然后就是等待更新结果</p>
-<p>(3): 这个时候咱们就将生成的json文件给删除了</p>
-<p>pod setup成功后会生成~/Library/Caches/CocoaPods/search_index.json文件。</p>
-<p>终端输入rm ~/Library/Caches/CocoaPods/search_index.json</p>
-<p>删除成功后再执行pod search</p>
-<p>(4):执行pod search </p>
-<p>终端输入：pod search LFBPageScrollView(不区分大小写)</p>
-<p>输出：Creating search index for spec repo ‘master’.. Done!，稍等片刻就会出现所有带LFBPageScrollView字段的类库出现；如果在这种情况下还是搜索不到你的第三方，那么你就只有再仔细检查一下，你之前哪里做的不对。</p>
-<p>关于如何更新版本的问题:</p>
-<p>在很多时候，我们需要更新迭代我们发布的第三方，我们这个时候只需要做以下几件事就可以轻松的更新原来的东西。</p>
-<p>1.需要将spec文件拷贝过来</p>
-<p>2.将spec的version 和tag 都改一下</p>
-<p>3.通过git打一个新的大于以前的tag值</p>
-<p>4.通过pod spec lint 来验证spec文件是否有效</p>
-<p>5.将新的spec文件推送到cocoapods上面去</p>
-<p>6.再次到cocoapods官网去认领自己的第三方(注:朋友说需要再次领取，也有人说不需要再次认领，不需要再次认领的情况我还是没尝试过，等我试过以后再给大家分享。)</p>
-<pre><code>注:(转载请注明出处!!!)
-</code></pre>
       
 
       
@@ -246,7 +254,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">分享</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">第三方</a>
         		</li>
       		
 		</ul>
@@ -302,7 +314,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/06/如何填补友盟分享新浪微博的那些坑/如何填补友盟分享新浪微博的那些坑/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -316,15 +328,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/07/06/抓包工具charles/抓包工具charles/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          抓包工具charles
-        
-      </div>
-    </a>
   
+    <a href="/2017/07/06/button横向自动排布的几种方式/button横向自动排布的几种方式/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">button横向自动排布的几种方式</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 

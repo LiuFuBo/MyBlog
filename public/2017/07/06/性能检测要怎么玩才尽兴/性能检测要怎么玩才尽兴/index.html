@@ -6,22 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://github.com/LiuFuBo1991">
-  <title>配置PodSpec.文件容易遇到的问题 | 刘富波的博客</title>
+  <title>性能检测要怎么玩才尽兴 | 刘富波的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="keywords" content="黑魔法">
+  <meta name="description" content="前言:   相信大家平时在利用xcode调试bug的时候经常性的遇到一些莫名其妙的问题，其中就包括崩溃了，打全局断点也不崩溃到某一行，而是直接报野指针的问题，像这种不能具体定位到错误在某一行的代码是最难找到问题的。现在我们可以通过打全局断点，然后xcode自带的内存检测工具来找到问题可能出现的地方。 打开一个XCode项目，最好是连上真机来测试，这里如果你xcode已经升级到了8.0以上，那么你就">
+<meta name="keywords" content="Instruments,性能检测">
 <meta property="og:type" content="article">
-<meta property="og:title" content="配置PodSpec.文件容易遇到的问题">
-<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/index.html">
+<meta property="og:title" content="性能检测要怎么玩才尽兴">
+<meta property="og:url" content="https://github.com/LiuFuBo1991/2017/07/06/性能检测要怎么玩才尽兴/性能检测要怎么玩才尽兴/index.html">
 <meta property="og:site_name" content="刘富波的博客">
-<meta property="og:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-07-05T08:12:29.000Z">
+<meta property="og:description" content="前言:   相信大家平时在利用xcode调试bug的时候经常性的遇到一些莫名其妙的问题，其中就包括崩溃了，打全局断点也不崩溃到某一行，而是直接报野指针的问题，像这种不能具体定位到错误在某一行的代码是最难找到问题的。现在我们可以通过打全局断点，然后xcode自带的内存检测工具来找到问题可能出现的地方。 打开一个XCode项目，最好是连上真机来测试，这里如果你xcode已经升级到了8.0以上，那么你就">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-5af1b48f8e6ac255.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-6d5c0ef5154f99aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-b1a96a5a6406a6a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-b85f9992e813b53d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-a0912cddcf64e038.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-8d674ad619395bff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-915c54bd34f15c32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-b43a2d72946904d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-aafaecbaa6be149c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-90fa702d5a85abe8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-8b3c71cd6b2a151e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-5269d74977a462ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1863813-69c5f7ffad543d85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-07-06T09:12:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="配置PodSpec.文件容易遇到的问题">
-<meta name="twitter:description" content="前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="性能检测要怎么玩才尽兴">
+<meta name="twitter:description" content="前言:   相信大家平时在利用xcode调试bug的时候经常性的遇到一些莫名其妙的问题，其中就包括崩溃了，打全局断点也不崩溃到某一行，而是直接报野指针的问题，像这种不能具体定位到错误在某一行的代码是最难找到问题的。现在我们可以通过打全局断点，然后xcode自带的内存检测工具来找到问题可能出现的地方。 打开一个XCode项目，最好是连上真机来测试，这里如果你xcode已经升级到了8.0以上，那么你就">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1863813-5af1b48f8e6ac255.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="刘富波的博客" type="application/atom+xml">
   
@@ -161,57 +172,104 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-性能检测要怎么玩才尽兴/性能检测要怎么玩才尽兴" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      配置PodSpec.文件容易遇到的问题
+      性能检测要怎么玩才尽兴
     </h1>
   
 
         
-        <a href="/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" class="archive-article-date">
-  	<time datetime="2017-07-04T09:47:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-04</time>
+        <a href="/2017/07/06/性能检测要怎么玩才尽兴/性能检测要怎么玩才尽兴/" class="archive-article-date">
+  	<time datetime="2017-07-06T08:18:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <font color="black" size="3"> 前言:相信大部分的iOS程序员都想将自己写的工具上传到cocoaPods供大家使用，网上关于这方面的教程已经太多太多了，但是如果你真正亲自去实践一次，你就会发现里面有很多坑等着你，并不像别人说的轻轻松松就把代码托管到了cocoaPods上面，最近闲来无事，我在经过无数次失败以后，终于使自己的PodSpec.文件通过了验证，这里我将自己遇到的坑给大家列出来，希望能够帮到那些有这方面需求的程序猿。</font>
-
-
-<p>一:第一坑，所有需要验证的PodSpec.文件都必须要打tag值，不然不能通过验证。(注意:每次打的tag值必须比上次打的tag值大，而且你的版本号也不能小于你的tag值，不然也不能验证通过)<br><a id="more"></a></p>
-<p>二:第二坑,所有的配置文件验证都是跟github上面的代码进行对比的，所以在修改了本地PodSpec.文件以后，请先上传代码到github再进行 pod lib lint 命令验证</p>
-<p>三:第三坑,公开头文件的目录请用单引号括起来,如下:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-aadb22a032833b06.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>四:如果你在终端中出现了以下显示，证明你的项目已经发布成功了<br><img src="http://upload-images.jianshu.io/upload_images/1863813-97c0e3583265057a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
-<p>五:一般情况下，在你提交成功以后，其实还是不能再终端中通过pod search 命令搜索到你托管的第三方的，你需要到cocoapods去认领你的第三方<br><a href="https://trunk.cocoapods.org/claims/new" target="_blank" rel="external">传送门</a></p>
-<p>六:之后就一直等待发布一段时间，然后就能在cocoapods上面搜索到你的第三方了(注：有时候还是搜索不出来你发布第三方，我们这个时候就可以只通过名字来搜索你的第三方 )</p>
-<p>pod search +三方名  + simple   </p>
-<p>(注:一开始我只能通过上面那种+simple的方式搜索出来，我当时是怀疑是自己的图片资源放在项目中，但是并没有在spec文件中设置规则来约束它，因为我的spec文件在进行验证的过程中报警告了，最后操作了一番，不需要加simple也能搜索出来了。)</p>
-<p>(1):  如果还是搜索不出来那就执行 pod setup</p>
-<p>发现显示的还是 Unable to find a pod with name, author, summary, or descriptionmatching ‘LFBPageScrollView’。</p>
-<p>(2)：如果搜索不出来那就更新pod  :</p>
-<p>命令:  pod repo update   然后就是等待更新结果</p>
-<p>(3): 这个时候咱们就将生成的json文件给删除了</p>
-<p>pod setup成功后会生成~/Library/Caches/CocoaPods/search_index.json文件。</p>
-<p>终端输入rm ~/Library/Caches/CocoaPods/search_index.json</p>
-<p>删除成功后再执行pod search</p>
-<p>(4):执行pod search </p>
-<p>终端输入：pod search LFBPageScrollView(不区分大小写)</p>
-<p>输出：Creating search index for spec repo ‘master’.. Done!，稍等片刻就会出现所有带LFBPageScrollView字段的类库出现；如果在这种情况下还是搜索不到你的第三方，那么你就只有再仔细检查一下，你之前哪里做的不对。</p>
-<p>关于如何更新版本的问题:</p>
-<p>在很多时候，我们需要更新迭代我们发布的第三方，我们这个时候只需要做以下几件事就可以轻松的更新原来的东西。</p>
-<p>1.需要将spec文件拷贝过来</p>
-<p>2.将spec的version 和tag 都改一下</p>
-<p>3.通过git打一个新的大于以前的tag值</p>
-<p>4.通过pod spec lint 来验证spec文件是否有效</p>
-<p>5.将新的spec文件推送到cocoapods上面去</p>
-<p>6.再次到cocoapods官网去认领自己的第三方(注:朋友说需要再次领取，也有人说不需要再次认领，不需要再次认领的情况我还是没尝试过，等我试过以后再给大家分享。)</p>
-<pre><code>注:(转载请注明出处!!!)
+        <p>前言:   相信大家平时在利用xcode调试bug的时候经常性的遇到一些莫名其妙的问题，其中就包括崩溃了，打全局断点也不崩溃到某一行，而是直接报野指针的问题，像这种不能具体定位到错误在某一行的代码是最难找到问题的。现在我们可以通过打全局断点，然后xcode自带的内存检测工具来找到问题可能出现的地方。</p>
+<p>打开一个XCode项目，最好是连上真机来测试，这里如果你xcode已经升级到了8.0以上，那么你就必须要有证书才能进行真机调试了。如果在XCode7上面，你是可以直接进行真机测试的。连上手机以后，选择produc-&gt;profile进入XCode自带的调试工具选择页面。<br><a id="more"></a></p>
+<p>如下图:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-5af1b48f8e6ac255.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>选择完以后的样式如下图:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-6d5c0ef5154f99aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>我们可以从上面看到箭头所指的四个地方，一个是Allocations-&gt;这个是关于UI布局方面的检测，第二个是Core Animation 这个是关于动画方面的检测，通过Core Animation可以检测到他的帧数，从而判断是不是卡，是否需要进一步完善动画。第三个Leaks就是我们用的最多的内存泄露检测，通过这个，我们可以大致锁定哪些地方可能有内存泄露，然后直接找到有内存泄露的地方，这样可以非常方便我们找到哪里有问题。第四个Time Profiler 这个是检测事件的工具，比如按钮的触发事件等等这些。接下来讲解如何使用它们。</p>
+<p>这里列举如何使用Leaks这个内存检测工具。</p>
+<p>1.首先点开Leaks这个工具，然后选中左上角的Leaks检测选项</p>
+<p>2.点击开始运行</p>
+<p>3.选择Call tress以一个树形结构来展示</p>
+<p>4.在右下角Call Tree选项中选择Separate by Thread 和 Hide System Libraries这两个，其他的展示没研究深刻，没用过，这样我们点击页面就可以看到那些地方有问题，然后我们双击有问题的那个类，就可以找到对应的代码，通过进入xcode去检查就行了。</p>
+<p>如图:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-b1a96a5a6406a6a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>通过上面的过程以后双击6步骤得到结果如下:<br><img src="http://upload-images.jianshu.io/upload_images/1863813-b85f9992e813b53d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>然后我们可以看到在第一步中我们能看到哪里有问题，然后点击步骤二，就可以直接到达XCode中，这句代码对应的地方，这样就可以找到可能有问题的地方，从而检查出我们项目是否有问题了。</p>
+<p>检测动画方面，其实方法也差不多，只是选项不太一样而已。最后选项如图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-a0912cddcf64e038.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>我们需要了解两个两个区域：</p>
+<p>这里记录了实时的fps数值，有些地方是0是因为屏幕没有滑动</p>
+<p>这是重中之重，接下来我会带大家逐个理解、体验这些调试选项</p>
+<p>有过游戏经验的人也许对fps这个概念比较熟悉。我们知道任何屏幕总是有一个刷新率，比如iphone推荐的刷新率是60Hz，也就是说GPU每秒钟刷新屏幕60次，因此两次刷新之间的间隔为16.67ms。这段时间内屏幕内容保持不变，称为一帧(frame)，fps表示frames per second，也就是每秒钟显示多少帧画面。对于静止不变的内容，我们不需要考虑它的刷新率，但在执行动画或滑动时，fps的值直接反映出滑动的流畅程度。根据不同选项可以找到问题，这里我们一项一项的来为大家讲解每一项代表的意思.</p>
+<p>1.Color Blended Layers 这个是图层颜色混合的意思.</p>
+<p>基本概念:</p>
+<p>我们要明白 像素 的概念。屏幕上每一个点都是一个像素点，颜色由R、G、B、alpha组成。如果某一块区域上覆盖了多层layer，最后所计算出来的显示的颜色效果，会受到这些layer的共同影响。举个例子：上层是蓝色(RGB=0,0,1),透明度为50%，下层是红色(RGB=1,0,0)。那么最终的显示效果是紫色(RGB=0.5,0,0.5)。这种颜色的混合(blended)需要消耗一定的GPU资源，在实际开发中可能不止只有两层。如果只想显示最上层的颜色，可以把它的透明度设置为100%，这样GPU会忽略下面所有的layer，从而节约了很多不必要的运算。</p>
+<p>Core Animation Instrucment</p>
+<p>类似如下图，可以通过Instrucments来选择Core Animation查看FPS：<br><img src="http://upload-images.jianshu.io/upload_images/1863813-8d674ad619395bff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"><br>注意:如果要看FPS,需要在真机上运行</p>
+<p>Demo优化前</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-915c54bd34f15c32.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>在优化之前，我们通过设置如下方式，可以看到有好多混合的地方，红色部分都是影响滚动时流畅性的。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-b43a2d72946904d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>Demo优化后</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-aafaecbaa6be149c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>优化后，我们看到没有中文标签变成绿色了，而有中文的标签还是混合后的颜色。关于有中文的标签如何去优化，这个问题现在没有办法，如果大家有什么好的方法，请一定要告诉我。</p>
+<p>优化的代码</p>
+<p>在优化前，cell的标题的背景颜色并没有手动设置，而是使用了默认的颜色，这时候即使我们的标题是没有中文的，也会出现混合。而笔者只是添加了一行代码：</p>
+<pre><code>{self.titleLabel.backgroundColor = self.contentView.backgroundColor;}
+</code></pre><p>这么一行代码，使得标签的背景色和父视图的背景颜色一样，就只可以解决混合的问题（中文除外）。 如何我们设置背景色为clear，一样会出现混合，即使父视图也是clear。</p>
+<p>同样，我们在配置CollectionViewCell的时候，也是这么处理：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-90fa702d5a85abe8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>我们设置cell的背景色、collectionview的背景色都为白色，然后titleLabel的背景色与父视图的背景色设置成一样，这样就可以解决混合问题，中文文本除外。</p>
+<p>我们尝试设置opaque、alpha都会是图层混合，因此最关键的还是backgroundColor这一关键属性。在实际开发中海油很多控件需要我们注意，这里只是简单介绍。</p>
+<p>2.Color Hits Green and Misses Red 光栅化</p>
+<p>光栅化是将一个layer预先渲染成位图(bitmap)，然后加入缓存中。如果对于阴影效果这样比较消耗资源的静态内容进行缓存，可以得到一定幅度的性能提升。demo中的这一行代码表示将label的layer光栅化：</p>
+<pre><code>{label.layer.shouldRasterize = YES;}
+</code></pre><p>如果shouldRasterize被设置成YES，对应的渲染结果会被缓存，如果图层是绿色，就表示这些缓存被复用；如果是红色就表示缓存会被重复创建，这就表示该处存在性能问题了。</p>
+<p>光栅化的核心在于缓存的思想。我们自己动手把玩一下，可以发现以下几个有意思的现象：</p>
+<p>上下微小幅度滑动时，一直是绿色</p>
+<p>上下较大幅度滑动，新出现的label一开始是红色，随后变成绿色</p>
+<p>如果静止一秒钟，刚开始滑动时会变红。</p>
+<p>这是因为layer进行光栅化后渲染成位图放在缓存中。当屏幕出现滑动时，我们直接从缓存中读取而不必渲染，所以会看到绿色。当新的label出现时，缓存中没有个这个label的位图，所以会变成红色。第三点比较关键，缓存中的对象有效期只有100ms，即如果在0.1s内没有被使用就会自动从缓存中清理出去。这就是为什么停留一会儿再滑动就会看到红色。</p>
+<p>光栅化的缓存机制是一把双刃剑，先写入缓存再读取有可能消耗较多的时间。因此光栅化仅适用于较复杂的、静态的效果。通过Instrument的调试发现，这里使用光栅化经常出现未命中缓存的情况，如果没有特殊需要则可以关闭光栅化，所以我们做的第二个优化是注释掉下面这行代码：</p>
+<pre><code>{label.layer.shouldRasterize = YES;}  
+</code></pre><p>光栅化会  导致离屏渲染，这个下面会讲解。</p>
+<p>概念理解</p>
+<p>OpenGL中，GPU屏幕渲染有以下两种方式：</p>
+<p>On-Screen Rendering</p>
+<p>意为当前屏幕渲染，指的是GPU的渲染操作是在当前用于显示的屏幕缓冲区中进行。</p>
+<p>Off-Screen Rendering</p>
+<p>意为离屏渲染，指的是GPU在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作。</p>
+<p>离屏渲染的是是非非</p>
+<p>相比于当前屏幕渲染，离屏渲染的代价是很高的，主要体现在两个方面：</p>
+<p>1.创建新缓冲区；要想进行离屏渲染，首先要创建一个新的缓冲区。</p>
+<p>2上下文切换；离屏渲染的整个过程，需要多次切换上下文环境：先是从当前屏幕（On-Screen）切换到离屏（Off-Screen）；等到离屏渲染结束以后，将离屏缓冲区的渲染结果显示到屏幕上有需要将上下文环境从离屏切换到当前屏幕。而上下文环境的切换是要付出很大代价的。</p>
+<p>离屏渲染触发方式</p>
+<p>设置了以下属性时，都会触发离屏绘制：</p>
+<p>shouldRasterize（光栅化）</p>
+<p>masks（遮罩）</p>
+<p>shadows（阴影）</p>
+<p>edge antialiasing（抗锯齿）</p>
+<p>group opacity（不透明）</p>
+<p>需要注意的是，如果shouldRasterize被设置成YES，在触发离屏绘制的同时，会将光栅化后的内容缓存起来，如果对应的layer及其sublayers没有发生改变，在下一帧的时候可以直接复用。这将在很大程度上提升渲染性能。而其它属性如果是开启的，就不会有缓存，离屏绘制会在每一帧都发生。按照之前的说法，如果将不在GPU的当前屏幕缓冲区中进行的渲染都称为离屏渲染，那么就还有另一种特殊的“离屏渲染”方式：cpu渲染。如果我们重写了drawRect方法，并且使用任何Core Graphics的技术进行了绘制操作，就涉及到了CPU渲染。整个渲染过程由CPU在App内同步地完成，渲染得到的bitmap最后再交由GPU用于显示。</p>
+<p>3.Color Offscreen Rendered Yellow 开启以后会把那些需要离屏渲染的图层高亮成黄色，这就意味着黄色图层可能存在性能问题。如下图:</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-8b3c71cd6b2a151e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>如果没有进行第二步优化，你会发现label也是黄色。可以看到tabbar和statusBar也是黄色，这是因为它们使用了模糊效果。图片也是黄色，这说明它也进行了离屏渲染，观察源码后发现主要原因是它使用了阴影，接下来我们进行第四个优化，在设置阴影效果的四行代码下面添加一行：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-5269d74977a462ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>这行代码制定了阴影路径，如果没有手动指定，Core Animation会去自动计算，这就会触发离屏渲染。如果人为指定了阴影路径，就可以免去计算，从而避免产生离屏渲染。</p>
+<p>设置cornerRadius本身并不会导致离屏渲染，但很多时候它还需要配合layer.masksToBounds = true使用。根据之前的总结，设置masksToBounds会导致离屏渲染。解决方案是尽可能在滑动时避免设置圆角，如果必须设置圆角，可以使用光栅化技术将圆角缓存起来：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1863813-69c5f7ffad543d85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>4.Color Copied images 这个是用来检测图片的格式转化的，比如应用中有一些从网络下载的图片，而GPU恰好不支持这个格式，这就需要CPU预先进行格式转化。第三个选项“Color Copied Images”就用来检测这种实时的格式转化，如果有则会将图片标记为蓝色。如果调试时发现有图片被标记为蓝色，说明图片格式有问题。</p>
+<p>5.Color Misaligned images 意思就是当图片的像素和目标控件的像素不对齐，就会放一个洋红色的图层在图片上，当图片的像素大小与控件的大小不一致而导致需要缩放时，图片会呈现黄色。</p>
+<p>6.Color Compositing Fast Path Blue 标记由硬件标记的路径。蓝色越多越好。</p>
+<p>7.Flash Updated Regions 这个选项会对重绘的内容高亮成黄色（也就是任何在软件层面使用Core Graphics绘制的图层）。这种绘图的速度很慢。如果频繁发生这种情况的话，这意味着有一个隐藏的bug或者说通过增加缓存或者使用替代方案会有提升性能的空间。</p>
+<pre><code>注:文章灵感来自同事，如有转载，请注明出处；谢谢。
 </code></pre>
       
 
@@ -246,7 +304,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">黑魔法</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Instruments</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">性能检测</a>
         		</li>
       		
 		</ul>
@@ -302,7 +364,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/04/配置PodSpec.文件容易遇到的问题/配置PodSpec.文件容易遇到的问题/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=https://github.com/LiuFuBo1991/2017/07/06/性能检测要怎么玩才尽兴/性能检测要怎么玩才尽兴/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -316,15 +378,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/07/06/抓包工具charles/抓包工具charles/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/07/06/JavaScriptCore的巨坑/JavaScriptCore的巨坑/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          抓包工具charles
+          JavaScriptCore的巨坑（JSExportAs方式绑定的本地通信）
         
       </div>
     </a>
   
+  
+    <a href="/2017/07/06/cocoaPods升级后遇到的巨坑/cocoaPods升级后遇到的巨坑/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">cocoaPods升级后遇到的巨坑</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
