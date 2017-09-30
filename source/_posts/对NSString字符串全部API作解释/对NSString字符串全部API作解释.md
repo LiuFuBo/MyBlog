@@ -9,7 +9,7 @@ iOS8最新API和一些生僻API，做了红色标注，便于大家查阅
 
 0.定义一个无符号整型 两个字节 范围[0,65535] 
 
-	{typedef unsigned short unichar;}
+    {typedef unsigned short unichar;}
 	
 <!-- more -->
 

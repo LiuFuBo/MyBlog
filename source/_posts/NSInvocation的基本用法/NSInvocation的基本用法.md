@@ -194,6 +194,16 @@ Target.m文件中把消息转发给了Boy类来执行
     }
     }
     return signature;
+    }  
+    
+    //所以我们需要做的是自己新建方法签名，再在forwardInvocation中用你要转发的那个对象调用这个对应的签名，这样也实现了消息转发。
+    - (void)forwardInvocation:(NSInvocation *)anInvocation{
+
+    if ([Boy  instancesRespondToSelector:anInvocation.selector]) {
+        [anInvocation invokeWithTarget:[Boy new]];
+    }
+    }
+  
     
 
 Boy.h文件中没有实现
